@@ -1,0 +1,6 @@
+reviews:
+  auto_review:
+    enabled: true
+    drafts: false        # set true if you also want draft PRs reviewed
+    base_branches:
+      - ".*"             # match ALL branches as the base (merge target)
