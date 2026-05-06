@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_kyc_information" model="ir.ui.view">
+        <field name="name">res.partner.form.kyc.information</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <widget
+                    name="web_ribbon"
+                    title="KYC Done"
+                    bg_color="text-bg-success"
+                    invisible="not kyc_customer_signature"
+                />
+            </xpath>
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Document Verification" name="document_verification">
+                    <field name="document_ids" mode="list">
+                        <list string="Documents">
+                            <field name="document_name"/>
+                            <field name="filename"/>
+                            <field name="document_type"/>
+                            <field name="status"/>
+                            <field name="verified"/>
+                        </list>
+                        <form string="Document">
+                            <group>
+                                <field name="document_name"/>
+                                <field name="file" filename="filename" widget="binary"/>
+                                <field name="filename"/>
+                                <field name="document_type"/>
+                                <field name="status"/>
+                                <field name="verified"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+                <page string="KYC Information" name="kyc_information">
+                    <div class="d-flex justify-content-end mb-3">
+                        <button
+                            name="action_send_customer_kyc"
+                            string="Send Customer KYC"
+                            type="object"
+                            class="btn-primary"
+                        />
+                    </div>
+
+                    <separator string="RISK ASSESSMENT MATRIX"/>
+                    <group>
+                        <group>
+                            <field
+                                name="kyc_risk_assessment_matrix"
+                                filename="kyc_risk_assessment_matrix_filename"
+                            />
+                            <field name="kyc_risk_assessment_matrix_filename" invisible="1"/>
+                            <field name="kyc_risk_assessment_score"/>
+                        </group>
+                        <group>
+                            <field name="kyc_onboarding_date"/>
+                            <field name="kyc_risk_rating"/>
+                        </group>
+                    </group>
+
+                    <separator string="DATE AND REFERENCE NO."/>
+                    <group>
+                        <group>
+                            <field name="kyc_sales_person_signed_on"/>
+                        </group>
+                        <group>
+                            <field name="kyc_reference_no"/>
+                        </group>
+                    </group>
+
+                    <separator string="CUSTOMER INFORMATION"/>
+                    <group>
+                        <group>
+                            <field name="kyc_contact_type"/>
+                            <field name="kyc_customer_name"/>
+                            <field name="kyc_gender" widget="radio"/>
+                            <field name="kyc_eid_no"/>
+                            <field name="kyc_fta_id"/>
+                            <field name="kyc_fta_password"/>
+                        </group>
+                        <group>
+                            <field name="kyc_passport_or_id_no"/>
+                            <field name="kyc_nationality"/>
+                            <field name="kyc_birthdate"/>
+                            <field name="kyc_id_document" filename="kyc_id_document_filename"/>
+                            <field name="kyc_id_document_filename" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <separator string="ADDRESS &amp; CONTACT DETAILS"/>
+                    <group>
+                        <group>
+                            <field name="kyc_non_resident"/>
+                            <field name="kyc_uae_resident"/>
+                        </group>
+                        <group>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="kyc_permanent_address"/>
+                        </group>
+                    </group>
+
+                    <separator string="BUSINESS &amp; OCCUPATION DETAILS"/>
+                    <group>
+                        <group>
+                            <field name="kyc_occupation"/>
+                            <field name="kyc_company_name"/>
+                        </group>
+                        <group>
+                            <field name="kyc_business_address"/>
+                            <field name="kyc_nature_of_business"/>
+                        </group>
+                    </group>
+
+                    <separator string="FINANCIAL DETAILS"/>
+                    <group>
+                        <group>
+                            <field name="kyc_annual_gross_income"/>
+                            <field name="kyc_purpose_of_transaction"/>
+                        </group>
+                    </group>
+
+                    <separator string="TRANSACTION DETAILS"/>
+                    <group>
+                        <group>
+                            <field name="kyc_source_of_funds"/>
+                            <field name="kyc_political_exposed" widget="radio"/>
+                        </group>
+                    </group>
+
+                    <separator string="DECLARATION DETAILS"/>
+                    <group>
+                        <group string="CUSTOMER">
+                            <field name="kyc_customer_declaration_name"/>
+                            <field
+                                name="kyc_customer_signature"
+                                widget="signature"
+                                options="{'full_name': 'kyc_customer_declaration_name'}"
+                            />
+                        </group>
+                        <group string="CUSTOMER REPRESENTATIVE">
+                            <field name="kyc_customer_representative_id" widget="many2one_avatar_user"/>
+                            <field
+                                name="kyc_customer_representative_signature"
+                                widget="signature"
+                                options="{'full_name': 'kyc_customer_representative_id'}"
+                            />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

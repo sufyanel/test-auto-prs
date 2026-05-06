@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="partner_document_view_form" model="ir.ui.view">
+        <field name="name">partner.document.form</field>
+        <field name="model">partner.document</field>
+        <field name="arch" type="xml">
+            <form string="Document">
+                <group>
+                    <field name="document_name"/>
+                    <field name="file" filename="filename" widget="binary"/>
+                    <field name="filename"/>
+                    <field name="document_type"/>
+                    <field name="status"/>
+                    <field name="verified"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="partner_document_view_list" model="ir.ui.view">
+        <field name="name">partner.document.list</field>
+        <field name="model">partner.document</field>
+        <field name="arch" type="xml">
+            <list string="Documents">
+                <field name="document_name"/>
+                <field name="filename"/>
+                <field name="document_type"/>
+                <field name="status"/>
+                <field name="verified"/>
+            </list>
+        </field>
+    </record>
+</odoo>
