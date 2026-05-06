@@ -87,12 +87,30 @@ class ResPartner(models.Model):
     document_ids = fields.One2many("partner.document", "partner_id", string="Documents")
 
     def _kyc_ensure_access_token(self):
+        """
+        Ensure the partner has a KYC portal access token and return it.
+        
+        Ensures the method is called on a single record. If the partner has no access token, a new token is generated and stored on the record.
+        
+        Returns:
+            kyc_access_token (str): The partner's KYC access token.
+        """
         self.ensure_one()
         if not self.kyc_access_token:
             self.sudo().write({"kyc_access_token": str(uuid.uuid4())})
         return self.kyc_access_token
 
     def get_kyc_portal_url(self, suffix=None, query_string=None):
+        """
+        Builds the partner's KYC portal URL and embeds an access token for portal access.
+        
+        Parameters:
+            suffix (str | None): Optional path suffix appended directly after the partner id in the URL (e.g., '/step'). If None, no suffix is added.
+            query_string (str | None): Optional additional query string appended to the URL; should start with '&' if extending the existing query parameters.
+        
+        Returns:
+            str: The constructed KYC portal URL (contains the `access_token` query parameter).
+        """
         self.ensure_one()
         params = {"access_token": self._kyc_ensure_access_token()}
         url = f"/my/customer-kyc/{self.id}{suffix or ''}?{url_encode(params)}"
@@ -101,6 +119,18 @@ class ResPartner(models.Model):
         return url
 
     def action_send_customer_kyc(self):
+        """
+        Send the Customer KYC email to each partner and return a client notification action.
+        
+        Ensures a KYC access token exists for each partner, sends the configured mail template to the partner's email, and returns an action that displays a success notification in the client.
+        
+        Returns:
+            dict: An `ir.actions.client` action dictionary that triggers a non-sticky success notification titled "Customer KYC" with the message "Customer KYC email sent."
+        
+        Raises:
+            UserError: If the mail template "contact_kyc_information.mail_template_customer_kyc" is not found.
+            UserError: If any partner in `self` does not have an email address set.
+        """
         template = self.env.ref(
             "contact_kyc_information.mail_template_customer_kyc",
             raise_if_not_found=False,
