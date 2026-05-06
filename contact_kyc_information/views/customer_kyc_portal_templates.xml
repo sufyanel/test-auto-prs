@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="customer_kyc_portal_page" name="Customer KYC Portal Form">
+        <t t-call="portal.portal_layout">
+            <div class="container my-4 position-relative">
+                <span
+                    t-if="partner.kyc_customer_signature"
+                    class="position-absolute top-0 end-0 badge text-bg-success rounded-0 px-4 py-2"
+                >
+                    KYC Done
+                </span>
+                <div t-if="message == 'sign_ok'" class="alert alert-success" role="alert">
+                    Customer KYC has been signed successfully.
+                </div>
+
+                <div class="text-center text-white bg-black p-4 mb-4">
+                    <h1 class="h3 mb-0">Customer Information Form (KYC)</h1>
+                </div>
+
+                <t t-set="section_class" t-value="'text-center text-white bg-black py-2 mb-0 h6'"/>
+                <t t-set="table_class" t-value="'table table-sm table-borderless border-bottom mb-5'"/>
+
+                <h2 t-att-class="section_class">Customer Information</h2>
+                <table t-att-class="table_class">
+                    <tbody>
+                        <tr><th class="w-25">Contact Type</th><td><span t-field="partner.kyc_contact_type"/></td></tr>
+                        <tr><th class="w-25">Full Name</th><td><span t-field="partner.kyc_customer_name"/></td></tr>
+                        <tr><th>Nationality</th><td><span t-field="partner.kyc_nationality"/></td></tr>
+                        <tr><th>EID no.</th><td><span t-field="partner.kyc_eid_no"/></td></tr>
+                        <tr><th>Passport no. / ID no.</th><td><span t-field="partner.kyc_passport_or_id_no"/></td></tr>
+                        <tr><th>FTA ID</th><td><span t-field="partner.kyc_fta_id"/></td></tr>
+                        <tr><th>Date of Birth</th><td><span t-field="partner.kyc_birthdate"/></td></tr>
+                        <tr><th>Gender</th><td><span t-field="partner.kyc_gender"/></td></tr>
+                    </tbody>
+                </table>
+
+                <h2 t-att-class="section_class">Address &amp; Contact Details</h2>
+                <table t-att-class="table_class">
+                    <tbody>
+                        <tr><th class="w-25">Contact Number</th><td><span t-field="partner.phone"/></td></tr>
+                        <tr><th>E-mail Address</th><td><span t-field="partner.email"/></td></tr>
+                        <tr><th>Address (of signatory)</th><td><span t-field="partner.kyc_permanent_address"/></td></tr>
+                        <tr>
+                            <th>Resident</th>
+                            <td>
+                                <span class="me-3">UAE Resident <input type="checkbox" disabled="disabled" t-att-checked="'checked' if partner.kyc_uae_resident else None"/></span>
+                                <span>Non Resident <input type="checkbox" disabled="disabled" t-att-checked="'checked' if partner.kyc_non_resident else None"/></span>
+                            </td>
+                        </tr>
+                        <tr><th>Permanent Address</th><td><span t-field="partner.kyc_permanent_address"/></td></tr>
+                        <tr><th>Contact Number</th><td><span t-field="partner.phone"/></td></tr>
+                        <tr><th>E-mail address</th><td><span t-field="partner.email"/></td></tr>
+                    </tbody>
+                </table>
+
+                <h2 t-att-class="section_class">Business &amp; Occupational Information</h2>
+                <table t-att-class="table_class">
+                    <tbody>
+                        <tr><th class="w-25">Occupation</th><td><span t-field="partner.kyc_occupation"/></td></tr>
+                        <tr><th>Company Name</th><td><span t-field="partner.kyc_company_name"/></td></tr>
+                        <tr><th>Business Address</th><td><span t-field="partner.kyc_business_address"/></td></tr>
+                        <tr><th>Nature of Business</th><td><span t-field="partner.kyc_nature_of_business"/></td></tr>
+                        <tr><th>Annual Gross Income</th><td><span t-field="partner.kyc_annual_gross_income"/></td></tr>
+                        <tr><th>Purpose of Transaction</th><td><span t-field="partner.kyc_purpose_of_transaction"/></td></tr>
+                    </tbody>
+                </table>
+
+                <h2 t-att-class="section_class">Financial Details</h2>
+                <table t-att-class="table_class">
+                    <tbody>
+                        <tr><th class="w-25">Source of Funds</th><td><span t-field="partner.kyc_source_of_funds"/></td></tr>
+                        <tr><th>Political Exposed Person or Individual</th><td><span t-field="partner.kyc_political_exposed"/></td></tr>
+                    </tbody>
+                </table>
+
+                <h2 t-att-class="section_class">Declaration</h2>
+                <table t-att-class="table_class">
+                    <tbody>
+                        <tr>
+                            <th class="w-25">Customer Name :-</th>
+                            <td><span t-field="partner.kyc_customer_declaration_name"/></td>
+                            <th class="w-25">Customer Representative Name :-</th>
+                            <td><span t-field="partner.kyc_customer_representative_id"/></td>
+                        </tr>
+                        <tr>
+                            <th>Signature (Customer) :-</th>
+                            <td class="align-middle" style="height: 100px;">
+                                <img
+                                    t-if="partner.kyc_customer_signature"
+                                    t-att-src="image_data_uri(partner.kyc_customer_signature)"
+                                    alt="Customer Signature"
+                                    style="max-height: 80px; max-width: 240px;"
+                                />
+                            </td>
+                            <th>Signature (Representative) :-</th>
+                            <td class="align-middle" style="height: 100px;">
+                                <img
+                                    t-if="partner.kyc_customer_representative_signature"
+                                    t-att-src="image_data_uri(partner.kyc_customer_representative_signature)"
+                                    alt="Representative Signature"
+                                    style="max-height: 80px; max-width: 240px;"
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-end mb-5">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customer_kyc_sign_modal">
+                        Accept &amp; Sign KYC
+                    </button>
+                </div>
+
+                <div role="dialog" class="modal fade" id="customer_kyc_sign_modal" name="customer_kyc_sign_modal">
+                    <div class="modal-dialog modal-lg">
+                        <form class="modal-content">
+                            <header class="modal-header">
+                                <h4 class="modal-title">Accept &amp; Sign Customer KYC</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
+                            </header>
+                            <main class="modal-body">
+                                <p>
+                                    By signing, you confirm the customer KYC information for
+                                    <strong t-out="partner.display_name"/>.
+                                </p>
+                                <t t-call="portal.signature_form">
+                                    <t t-set="call_url" t-value="partner.get_kyc_portal_url(suffix='/accept')"/>
+                                    <t
+                                        t-set="default_name"
+                                        t-value="partner.kyc_customer_declaration_name or partner.kyc_customer_name or partner.name"
+                                    />
+                                </t>
+                            </main>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
